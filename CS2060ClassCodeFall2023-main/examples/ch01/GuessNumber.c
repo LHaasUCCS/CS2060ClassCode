@@ -16,6 +16,8 @@ void guessGame(void);
 bool isCorrect(int guess, int answer); 
 
 int main(void) {
+
+   printf("Hello Deb");
     //
    srand(time(0)); 
 
