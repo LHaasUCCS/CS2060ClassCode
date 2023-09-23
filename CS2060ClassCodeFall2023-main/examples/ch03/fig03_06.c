@@ -14,17 +14,31 @@ int main(void) {
       // prompt user for input and obtain value from user 
       printf("%s", "Enter result (1=pass,2=fail): ");
       int result = 0; // one exam result 
-      scanf("%d", &result);
+      int scanResult = scanf("%d", &result);
+      while(getchar() != EOF);
+      
+      if (scanResult > 0) {
+          if (result == 1) {
+              passes = passes + 1;
+              student = student + 1; // increment student counter
+          }
 
-      // if result 1, increment passes 
-      if (result == 1) {     
-         passes = passes + 1;
-      } // end if 
-      else { // otherwise, increment failures 
-         failures = failures + 1;
-      } // end else 
+          else if (result == 2) {
+              failures = failures + 1;
+              student = student + 1; // increment student counter
+          }
 
-      student = student + 1; // increment student counter  
+          else {
+              printf("%s", "Invalid input.\n");
+          }
+      }
+      else {
+          printf("%s", "Invalid input.\n");
+      }
+      
+
+
+       
    } // end while 
 
    // termination phase; display number of passes and failures 
