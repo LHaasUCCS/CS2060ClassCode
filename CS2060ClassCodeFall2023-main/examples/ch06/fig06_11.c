@@ -6,7 +6,7 @@
 // function prototypes
 void modifyArray(int b[], size_t size); 
 void modifyElement(int e);        
-void displayArray(int incomingArray[], size_t size);
+void displayArray(int const incomingArray[], size_t size);
  
 // function main begins program execution
 int main(void) {
