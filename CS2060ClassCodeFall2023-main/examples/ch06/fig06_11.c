@@ -5,11 +5,17 @@
 
 // function prototypes
 void modifyArray(int b[], size_t size); 
-void modifyElement(int e);              
+void modifyElement(int e);        
+void displayArray(int incomingArray[], size_t size);
  
 // function main begins program execution
 int main(void) {
    int a[SIZE] = {0, 1, 2, 3, 4}; // initialize array a
+
+   printf("%p\n", a);
+   printf("%p\n", &a[0]);
+
+   displayArray(a, SIZE);
 
    puts("Effects of passing entire array by reference:\n\nThe "
       "values of the original array are:");
@@ -53,6 +59,12 @@ void modifyElement(int e) {
    e *= 2; // multiply parameter by 2                                  
    printf("Value in modifyElement is %d\n", e);            
 } 
+
+void displayArray(int const incomingArray[], size_t size) {
+    for (size_t i = 0; i < size; i++) {
+        printf("\nArray index %d has a value of %d\n", i, incomingArray[i]);
+    }
+}
 
 
 
