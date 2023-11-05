@@ -175,9 +175,11 @@ void passStructByValue(struct employee employeeTest)
 void passStructByReference(struct employee* employeeTestPtr)
 {
 	puts("In function call - change values in the structure");
+	
+	scanf("%lf", &(employeeTestPtr->hourlySalary));
+	while (getchar() != '\n');
 
-	strncpy(employeeTestPtr->firstName, "Dynamic", NAME_SIZE);
-	employeeTestPtr->hourlySalary = 100.00;
+	fgets(&(employeeTestPtr->firstName), NAME_SIZE, stdin);
 
 	printf("Employee's first name = %s\n", employeeTestPtr->firstName);
 	printf("Employee's hourly salary = %3.2f\n\n", employeeTestPtr->hourlySalary);

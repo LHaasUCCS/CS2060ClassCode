@@ -26,7 +26,7 @@ int main(void) {
    FILE *cfPtr = NULL; // clients.txt file pointer
 
    // fopen opens the file; exits program if file cannot be opened
-   if ((cfPtr = fopen("clients.txt", "r")) == NULL) {
+   if ((cfPtr = fopen("C:\\Users\\Freew\\OneDrive\\Documents\\GitHub\\CS2060ClassCode\\CS2060ClassCodeFall2023-main\\examples\\ch11\\clients.txt", "r")) == NULL) {
       puts("File could not be opened");
    } 
    else {

@@ -6,7 +6,7 @@ int main(void){
    FILE *cfPtr = NULL; // cfPtr = clients.txt file pointer   
 
    // fopen opens the file. Exit the program if unable to create the file 
-   if ((cfPtr = fopen("clients.txt", "w")) == NULL) {
+   if ((cfPtr = fopen("C:\\Users\\Freew\\OneDrive\\Documents\\GitHub\\CS2060ClassCode\\CS2060ClassCodeFall2023-main\\examples\\ch11\\clients.txt", "w")) == NULL) {
       puts("File could not be opened");
    } 
    else { 

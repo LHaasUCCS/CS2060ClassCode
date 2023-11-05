@@ -63,7 +63,7 @@ void  exploreValidateInt(const char* buff)
 	if (end == buff) {
 		fprintf(stderr, "%s: not a decimal number\n", buff);
 	}
-	else if ('\0' != *end) {
+	else if ('\n' != *end) {
 		fprintf(stderr, "%s: extra characters at end of input: %s\n", buff, end);
 	}
 	else if ((LONG_MIN == intTest || LONG_MAX == intTest) && ERANGE == errno) {
@@ -80,3 +80,5 @@ void  exploreValidateInt(const char* buff)
 		printf("%d is integer value ", validInt);
 	}
 }
+
+
