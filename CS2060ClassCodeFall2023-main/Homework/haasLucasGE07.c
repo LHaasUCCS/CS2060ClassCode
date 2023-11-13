@@ -3,24 +3,27 @@
 
 #define STRING_MAX 80
 
-int stringCompare(const char string1[STRING_MAX], const char string2[STRING_MAX]);
-void insert(struct pets** headPtr);
-void display(const struct pets* headPtr);
-void toFile(const struct pets* headPtr);
-void remove(struct pets* headPtr, char nameRemove[STRING_MAX]);
-//void remove all();
-
-struct pets {
+typedef struct pets {
 	char name[STRING_MAX];
 	int age;
-	struct pets *nextPtr;
-};
+	struct pets* nextPtr;
+} Pets;
+
+
+int stringCompare(const char string1[STRING_MAX], const char string2[STRING_MAX]);
+void insert(Pets** headPtr);
+void display(const Pets* headPtr);
+void toFile(const Pets* headPtr);
+void removePet(Pets** headPtr);
+void removeAll(Pets* headPtr);
 
 void main() {
-	struct pets* headPtr = NULL;
+	Pets* headPtr = NULL;
 	insert(&headPtr);
 	display(headPtr);
 	toFile(headPtr);
+	removePet(&headPtr);
+	removeAll(headPtr);
 	
 }
 
@@ -36,7 +39,7 @@ int stringCompare(const char string1[STRING_MAX], const char string2[STRING_MAX]
 	return strcmp(string1, string2);
 }
 
-void insert(struct pets** headPtr) {
+void insert(Pets** headPtr) {
 	char input =  'y';
 	while (input == 'y') {
 		printf("%s: ", "Do you want to add another pet? Please enter (y)es or (n)o");
@@ -44,7 +47,7 @@ void insert(struct pets** headPtr) {
 		while ((getchar()) != '\n');
 		printf("\n");
 		if (input == 'y') {
-			struct pets* newPetPtr = malloc(sizeof(struct pets));
+			Pets* newPetPtr = malloc(sizeof(Pets));
 			printf("%s", "Enter name ");
 			fgets(&(newPetPtr->name), STRING_MAX, stdin);
 			newPetPtr->name[strlen(newPetPtr->name) - 1] = '\0';
@@ -56,9 +59,9 @@ void insert(struct pets** headPtr) {
 			{
 				newPetPtr->nextPtr = NULL;
 
-				struct pets* previousPtr = NULL;
+				Pets* previousPtr = NULL;
 
-				struct pets* currentPtr = *headPtr;
+				Pets* currentPtr = *headPtr;
 
 
 				while (currentPtr != NULL && stringCompare(currentPtr->name, newPetPtr->name) == -1)
@@ -82,14 +85,14 @@ void insert(struct pets** headPtr) {
 	}
 }
 
-void display(const struct pets* headPtr) {
+void display(const Pets* headPtr) {
 	if (headPtr == NULL) {
 		printf("%s\n", "List is empty");
 	}
 
 	else {
 		printf("%s\n", "The names in alphabetical order:");
-		struct pets* currentPtr = headPtr;
+		Pets* currentPtr = headPtr;
 		while (currentPtr != NULL) {
 			printf("%s is %d years old\n", currentPtr->name, currentPtr->age);
 			currentPtr = currentPtr->nextPtr;
@@ -97,7 +100,7 @@ void display(const struct pets* headPtr) {
 	}
 }
 
-void toFile(const struct pets* headPtr) {
+void toFile(const Pets* headPtr) {
 	FILE* filePtr;
 	if (filePtr = fopen("petlist.txt", "w") == NULL) {
 		printf("%s", "Could not open file.");
@@ -111,7 +114,7 @@ void toFile(const struct pets* headPtr) {
 
 	else {
 		fprintf(filePtr, "%s\n", "The names in alphabetical order:");
-		struct pets* currentPtr = headPtr;
+		Pets* currentPtr = headPtr;
 		while (currentPtr != NULL) {
 			fprintf(filePtr, "%s is %d years old\n", currentPtr->name, currentPtr->age);
 			currentPtr = currentPtr->nextPtr;
@@ -120,6 +123,79 @@ void toFile(const struct pets* headPtr) {
 	fclose(filePtr);
 }
 
-void remove(struct pets* headPtr, char nameRemove[STRING_MAX]) {
+void removePet(Pets** headPtr) {
+	Pets* previous = NULL;
+	Pets* current = *headPtr;
 
+	char input = 'y';
+	while (input == 'y') {
+		char nameToDelete[STRING_MAX];
+		puts("Do you want to delete a pet from the list? Please enter (y)es or (no): ");
+		input = getchar();
+		while (getchar() != '\n');
+
+
+		if (input == 'y') {
+			puts("Enter the pet's name to delete");
+			fgets(&nameToDelete, STRING_MAX, stdin);
+			nameToDelete[strlen(nameToDelete) - 1] = '\0';
+			
+			if (*headPtr != NULL) {
+				
+				if (strcmp((*headPtr)->name, nameToDelete) == 0) {
+					*headPtr = (*headPtr)->nextPtr;
+					 
+					free(current);
+					current = NULL;
+				}
+				
+				else 
+				{
+					
+					while (current != NULL && strcmp(current->name, nameToDelete) != 0)
+					{
+						 
+						previous = current;
+						current = current->nextPtr;
+					}
+
+						
+					if (current != NULL)
+					{
+						 
+						previous->nextPtr = current->nextPtr;
+						
+						free(current);
+						current = NULL;
+					}
+					
+					else
+					{
+						printf("%s is not found in the list of pets!\n", nameToDelete);
+					}
+				}
+				display(*headPtr);
+			}
+			else 
+			{
+				puts("There are no pets in the list!");
+				input = 'n';
+			}
+		}
+	}
+}
+
+void removeAll(Pets* headPtr)
+{
+	Pets* current = headPtr;
+	Pets* nextPtr = NULL;
+
+	while (current != NULL)
+	{
+		nextPtr = current->nextPtr;
+		free(current);
+		current = nextPtr;
+	}
+
+	headPtr = NULL;
 }
