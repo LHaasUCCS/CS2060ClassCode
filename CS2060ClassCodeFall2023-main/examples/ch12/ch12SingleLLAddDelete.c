@@ -36,7 +36,7 @@ char validateYesNo();
 int main(void)
 {
 	puts("\n\nExplore linked lists");
-
+	
 	//
 	Node* headNodePtr = NULL;
 	int number = 0;
