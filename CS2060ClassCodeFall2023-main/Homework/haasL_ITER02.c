@@ -1,6 +1,7 @@
 /*Lucas Haas
 * CS 2060 ITER02
 * OS: Win 11
+* Description:
 */
 
 
@@ -33,6 +34,17 @@
 #define CATEGORIES "Check-in process", "Cleanliness", "Amenities"
 
 
+struct property {
+	int interval1;
+	int interval2;
+	int rentalRate;
+	int discount;
+	char name[STRING_LENGTH];
+	char location[STRING_LENGTH];
+	int survey[VACATION_RENTERS][RENTER_SURVEY_CATEGORIES];
+};
+
+
 // function prototypes
 //Prints the rental property information 
 void printRentalPropertyInfo(const struct property* PropertyPtr);
@@ -63,15 +75,7 @@ void ownerSummary(unsigned int nights, double charges, const struct property* pr
 void printRatings(const struct property* propertyPtr);
 
 
-struct property {
-	int interval1;
-	int interval2;
-	int rentalRate;
-	int discount;
-	char name[STRING_LENGTH];
-	char location[STRING_LENGTH];
-	int survey[VACATION_RENTERS][RENTER_SURVEY_CATEGORIES];
-};
+
 
 
 main(void){
