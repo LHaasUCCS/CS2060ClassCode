@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <string.h>
 
 //Maximum length of a string
 #define  STRING_LENGTH 80
@@ -53,11 +54,11 @@ void printRentalPropertyInfo(const struct property* PropertyPtr);
 int getValidInt(int min, int max, int* toStore);
 
 //Calculates the charge based on the number of nights rented
-double calculateCharges(unsigned int nights, const struct property* propertyPtr);
+int calculateCharges(int nights, const struct property* propertyPtr);
 
 //Prints the number of nights, and the charge  if there were any rentals
 //Use for printing  vacationer charge or for property owner summary
-void printNightsCharged(unsigned int nights, double charges);
+void printNightsCharged(int nights, int charges);
 
 //Initializes struct values with user input
 void propertySetup(struct property* propertyPtr);
@@ -65,11 +66,14 @@ void propertySetup(struct property* propertyPtr);
 //Login function for owner
 int login();
 
+//prints categories for easy changes
+void printCategories();
+
 //applies survey data from users to survey array in property struct
 void survey(struct property* propertyPtr);
 
 //Prints summary of property for owner at the end
-void ownerSummary(unsigned int nights, double charges, const struct property* propertyPtr, unsigned int renters);
+void ownerSummary(int nights, int charges, const struct property* propertyPtr, unsigned int renters);
 
 //prints all ratings
 void printRatings(const struct property* propertyPtr);
@@ -78,7 +82,7 @@ void printRatings(const struct property* propertyPtr);
 
 
 
-main(void){
+int main(void){
 	if (login() == 0) {
 
 		struct property newProperty;
@@ -87,9 +91,9 @@ main(void){
 
 		printRentalPropertyInfo(&newProperty);
 
-		unsigned int nights = 0;
+		int nights = 0;
 		int charges = 0;
-		unsigned int totalNights = 0;
+		int totalNights = 0;
 		int totalCharges = 0;
 		unsigned int renters = 0;
 
@@ -114,6 +118,7 @@ main(void){
 
 	printf("%s\n", "Exiting AirUCCS.");
 	
+	return 0;
 }
 
 void propertySetup(struct property* propertyPtr) {
@@ -126,11 +131,11 @@ void propertySetup(struct property* propertyPtr) {
 	printf("%s", "Enter discount:");
 	getValidInt(MIN_RATE, propertyPtr->rentalRate, &(propertyPtr->discount));
 	printf("%s", "Enter property name:");
-	fgets(&(propertyPtr->name), STRING_LENGTH, stdin);
-	propertyPtr->name[strlen(propertyPtr->name) - 1] = "\0";
+	fgets(propertyPtr->name, STRING_LENGTH, stdin);
+	propertyPtr->name[strlen(propertyPtr->name) - 1] = '\0';
 	printf("%s", "Enter location info:");
-	fgets(&(propertyPtr->location), STRING_LENGTH, stdin);
-	propertyPtr->location[strlen(propertyPtr->location) - 1] = "\0";
+	fgets(propertyPtr->location, STRING_LENGTH, stdin);
+	propertyPtr->location[strlen(propertyPtr->location) - 1] = '\0';
 	
 }
 
@@ -216,8 +221,8 @@ int getValidInt(int min, int max, int* toStore) {
 }
 
 
-double calculateCharges(unsigned int nights, const struct property* propertyPtr) {
-	double charge = 0;
+int calculateCharges(int nights, const struct property* propertyPtr) {
+	int charge = 0;
 	if (nights <= propertyPtr->interval1) {
 		charge = nights * propertyPtr->rentalRate;
 		printNightsCharged(nights, charge);
@@ -257,9 +262,10 @@ void survey(struct property* propertyPtr) {
 	renter++;
 }
 
-void printNightsCharged(unsigned int nights, double charges) {
+void printNightsCharged(int nights, int charges) {
 	printf("%s\n", "Nights   Charges");
-	printf("%d   %.2f\n", nights, charges);
+	double doubleCharge = (double)charges;
+	printf("%d   %.2f\n", nights, doubleCharge);
 }
 
 void printRatings(const struct property* propertyPtr) {
@@ -274,11 +280,12 @@ void printRatings(const struct property* propertyPtr) {
 	}
 }
 	
-void ownerSummary(unsigned int nights, double  charges, const struct property* propertyPtr, unsigned int renters) {
+void ownerSummary(int nights, int charges, const struct property* propertyPtr, unsigned int renters) {
+	double doubleCharges = (double)charges;
 	printf("%s\n", "-----Property Totals-----");
 	printf("%s\n", "Renters   Nights   Charges");
-	printf("%d\t  %d\t   %.2f\n", renters, nights, charges);
-	printNightsCharged(nights, charges, renters);
+	printf("%d\t  %d\t   %.2f\n", renters, nights, doubleCharges);
+	printNightsCharged(nights, charges);
 	printf("%s\n", "-----Survey Rating Averages-----");
 	for (size_t i = 0; i < RENTER_SURVEY_CATEGORIES; i++) {
 		double average = 0;
@@ -288,7 +295,7 @@ void ownerSummary(unsigned int nights, double  charges, const struct property* p
 			}
 		}
 		average = average / VACATION_RENTERS;
-		printf("Category %d: %f\t", i + 1, average);
+		printf("Category %zu: %.2f\t", i + 1, average);
 	}
 
 }
