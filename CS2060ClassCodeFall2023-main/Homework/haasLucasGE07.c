@@ -64,22 +64,31 @@ void insert(Pets** headPtr) {
 				Pets* currentPtr = *headPtr;
 
 
-				while (currentPtr != NULL && stringCompare(currentPtr->name, newPetPtr->name) == -1)
-				{
+				while (currentPtr != NULL && strcmp(currentPtr->name, newPropPtr->name) < 0) {
 					previousPtr = currentPtr;
 					currentPtr = currentPtr->nextPtr;
 				}
 
-				if (previousPtr == NULL)
-				{
-					*headPtr = newPetPtr;
+				if (currentPtr == NULL) {
+					// Handle the case where you reached the end of the list
+					// You might want to append newPropPtr to the end in this case
+					if (previousPtr == NULL) {
+						*headPtr = newPropPtr;  // Set as the first node if the list is empty
+					}
+					else {
+						previousPtr->nextPtr = newPropPtr;  // Append to the end of the list
+					}
 				}
-				else
-				{
-					previousPtr->nextPtr = newPetPtr;
+				else {
+					// Your existing logic for inserting in the middle of the list
+					if (previousPtr == NULL) {
+						*headPtr = newPropPtr;
+					}
+					else {
+						previousPtr->nextPtr = newPropPtr;
+					}
+					newPropPtr->nextPtr = currentPtr;
 				}
-
-				newPetPtr->nextPtr = currentPtr;
 			}
 		}
 	}
